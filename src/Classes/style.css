@@ -1,0 +1,51 @@
+.classes-container {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.classes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+  max-width: 1000px;
+  width: 100%;
+}
+
+.course-card {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 15px;
+  background-color: #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  height: 100%; /* Ensure card expands to fill its container */
+  position: relative;
+}
+
+.course-card h2 {
+  font-size: 1.5em;
+  margin-bottom: 10px;
+}
+
+.course-card p {
+  margin: 5px 0;
+}
+
+.enroll-button {
+  margin-top: auto; /* Pushes the button to the bottom of the card */
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+  font-size: 1em;
+  width: 100%;
+}
+
+.enroll-button:hover {
+  background-color: #0056b3;
+}
