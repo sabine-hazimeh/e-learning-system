@@ -47,7 +47,7 @@ function EnrolledClasses() {
                 enrollment.classId.schedule.endDate
               ).toLocaleDateString()}
             </p>
-            <Link to="/files">
+            <Link to={`/files/${enrollment.classId._id}`}>
               <button className="enroll-button">View Files</button>
             </Link>
           </div>

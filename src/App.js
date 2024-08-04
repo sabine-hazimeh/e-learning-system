@@ -18,7 +18,8 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/classes" element={<Classes />} />
         <Route path="/enrolled" element={<EnrolledClasses />} />
-        <Route path="/files" element={<Files />} />
+        {/* <Route path="/files" element={<Files />} /> */}
+        <Route path="/files/:classId" element={<Files />} />
       </Routes>
     </BrowserRouter>
   );
