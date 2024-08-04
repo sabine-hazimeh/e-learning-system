@@ -5,6 +5,9 @@ import Login from "./Login";
 import Classes from "./Classes";
 import Header from "./Header";
 import Home from "./Home";
+import EnrolledClasses from "./EnrolledClasses";
+import Files from "./Files";
+
 function App() {
   return (
     <BrowserRouter>
@@ -14,6 +17,8 @@ function App() {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/login" element={<Login />} />
         <Route path="/classes" element={<Classes />} />
+        <Route path="/enrolled" element={<EnrolledClasses />} />
+        <Route path="/files" element={<Files />} />
       </Routes>
     </BrowserRouter>
   );

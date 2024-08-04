@@ -1,3 +1,9 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 .classes-container {
   padding: 20px;
   display: flex;
@@ -21,8 +27,6 @@
   padding: 15px;
   background-color: #fff;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  height: 100%; /* Ensure card expands to fill its container */
-  position: relative;
 }
 
 .course-card h2 {
@@ -35,7 +39,7 @@
 }
 
 .enroll-button {
-  margin-top: auto; /* Pushes the button to the bottom of the card */
+  margin-top: auto;
   padding: 10px 15px;
   border: none;
   border-radius: 5px;
