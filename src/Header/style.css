@@ -1,0 +1,33 @@
+body {
+  font-family: "Roboto", sans-serif;
+  padding: 0;
+  margin: 0;
+}
+.header {
+  display: flex;
+  justify-content: space-between;
+  background-color: #007bff;
+  padding: 1rem 1.5rem;
+  align-items: center;
+}
+.logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  font-style: italic;
+  color: white;
+  text-decoration: none;
+}
+.header-links {
+  text-decoration: none;
+  color: white;
+  font-size: 1.25rem;
+}
+.header-icons {
+  margin-right: 1rem;
+  font-size: 2rem;
+  color: white;
+}
+.middle {
+  display: flex;
+  gap: 20px;
+}
