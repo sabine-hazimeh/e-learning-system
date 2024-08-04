@@ -7,6 +7,7 @@ import Header from "./Header";
 import Home from "./Home";
 import EnrolledClasses from "./EnrolledClasses";
 import Files from "./Files";
+import PrivateRoute from "./Components/PrivateRoute";
 
 function App() {
   return (
@@ -16,10 +17,11 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/classes" element={<Classes />} />
-        <Route path="/enrolled" element={<EnrolledClasses />} />
-        {/* <Route path="/files" element={<Files />} /> */}
-        <Route path="/files/:classId" element={<Files />} />
+        <Route element={<PrivateRoute />}>
+          <Route path="/classes" element={<Classes />} />
+          <Route path="/enrolled" element={<EnrolledClasses />} />
+          <Route path="/files/:classId" element={<Files />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   );
