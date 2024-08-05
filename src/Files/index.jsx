@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import "./style.css";
 
 function Files() {
-  const { classId } = useParams(); // Get classId from URL parameters
+  const { classId } = useParams();
   const [files, setFiles] = useState([]);
 
   useEffect(() => {

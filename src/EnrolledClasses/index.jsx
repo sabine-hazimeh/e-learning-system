@@ -1,53 +1,34 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import "./style.css";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  fetchEnrollments,
+  withdrawFromClass,
+} from "../data-source/redux/EnrolledClassesSlice/slice";
 import { Link } from "react-router-dom";
+import "./style.css";
 
 function EnrolledClasses() {
-  const [enrollments, setEnrollments] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const dispatch = useDispatch();
+  const { enrollments, loading, error } = useSelector(
+    (state) => state.enrollments
+  );
 
   useEffect(() => {
-    const fetchEnrollments = async () => {
-      try {
-        const token = localStorage.getItem("authToken");
-        const response = await axios.get(
-          "http://localhost:3000/api/enrollment",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        setEnrollments(response.data);
-      } catch (error) {
-        console.error("Error fetching enrollments:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
+    dispatch(fetchEnrollments());
+  }, [dispatch]);
 
-    fetchEnrollments();
-  }, []);
-
-  const handleWithdraw = async (classId) => {
-    try {
-      const token = localStorage.getItem("authToken");
-      await axios.post(
-        "http://localhost:3000/api/withdrawals",
-        { classId },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-    } catch (error) {
-      console.error("Error withdrawing from class:", error);
-    }
+  const handleWithdraw = (classId) => {
+    dispatch(withdrawFromClass(classId));
   };
 
   if (loading) return <div>Loading...</div>;
+  if (error)
+    return (
+      <div>
+        Error fetching enrollments:{" "}
+        {typeof error === "object" ? JSON.stringify(error) : error}
+      </div>
+    );
 
   return (
     <div className="classes-container">

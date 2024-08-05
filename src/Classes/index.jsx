@@ -8,6 +8,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 import "./style.css";
+
 function Classes() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -34,7 +35,9 @@ function Classes() {
       {isLoading ? (
         <p>Loading...</p>
       ) : error ? (
-        <p>Error: {error}</p>
+        <p>
+          Error: {typeof error === "object" ? JSON.stringify(error) : error}
+        </p>
       ) : (
         <div className="classes-grid">
           {classes.map((course) => (
