@@ -2,8 +2,10 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./style.css";
 import { Link } from "react-router-dom";
+
 function EnrolledClasses() {
   const [enrollments, setEnrollments] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchEnrollments = async () => {
@@ -20,11 +22,32 @@ function EnrolledClasses() {
         setEnrollments(response.data);
       } catch (error) {
         console.error("Error fetching enrollments:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchEnrollments();
   }, []);
+
+  const handleWithdraw = async (classId) => {
+    try {
+      const token = localStorage.getItem("authToken");
+      await axios.post(
+        "http://localhost:3000/api/withdrawals",
+        { classId },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+    } catch (error) {
+      console.error("Error withdrawing from class:", error);
+    }
+  };
+
+  if (loading) return <div>Loading...</div>;
 
   return (
     <div className="classes-container">
@@ -50,6 +73,12 @@ function EnrolledClasses() {
             <Link to={`/files/${enrollment.classId._id}`}>
               <button className="enroll-button">View Files</button>
             </Link>
+            <button
+              className="withdraw-button"
+              onClick={() => handleWithdraw(enrollment.classId._id)}
+            >
+              Withdraw
+            </button>
           </div>
         ))}
       </div>
