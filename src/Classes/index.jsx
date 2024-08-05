@@ -1,74 +1,65 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import "./style.css";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  fetchClasses,
+  enrollClass,
+} from "../data-source/redux/ClassesSlice/slice";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
+import { useNavigate } from "react-router-dom";
+import "./style.css";
 function Classes() {
-  const [classes, setClasses] = useState([]);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { classes, error, isLoading } = useSelector((state) => state.classes);
 
   useEffect(() => {
-    const fetchClasses = async () => {
-      try {
-        const response = await axios.get("http://localhost:3000/api/classes");
-        setClasses(response.data);
-      } catch (error) {
-        console.error("Error fetching classes:", error);
-      }
-    };
+    dispatch(fetchClasses());
+  }, [dispatch]);
 
-    fetchClasses();
-  }, []);
-
-  const handleEnroll = async (classId) => {
-    try {
-      const token = localStorage.getItem("authToken");
-      const response = await axios.post(
-        "http://localhost:3000/api/enrollment",
-        { classId },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      console.log("Enrollment successful:", response.data);
-      navigate("/enrolled");
-    } catch (error) {
-      console.error("Error enrolling:", error);
-      if (error.response && error.response.status === 400) {
-        toast.error(error.response.data.error);
-      }
-    }
+  const handleEnroll = (classId) => {
+    dispatch(enrollClass(classId))
+      .unwrap()
+      .then(() => {
+        navigate("/enrolled");
+      })
+      .catch((err) => {
+        toast.error(err.message || "Enrollment failed.");
+      });
   };
 
   return (
     <div className="classes-container">
       <h1>Classes</h1>
-      <div className="classes-grid">
-        {classes.map((course) => (
-          <div key={course._id} className="course-card">
-            <h2>{course.title}</h2>
-            <p>{course.description}</p>
-            <p>Instructor: {course.instructor.name}</p>
-            <p>
-              Start Date:{" "}
-              {new Date(course.schedule.startDate).toLocaleDateString()}
-            </p>
-            <p>
-              End Date: {new Date(course.schedule.endDate).toLocaleDateString()}
-            </p>
-            <button
-              className="enroll-button"
-              onClick={() => handleEnroll(course._id)}
-            >
-              Enroll
-            </button>
-          </div>
-        ))}
-      </div>
+      {isLoading ? (
+        <p>Loading...</p>
+      ) : error ? (
+        <p>Error: {error}</p>
+      ) : (
+        <div className="classes-grid">
+          {classes.map((course) => (
+            <div key={course._id} className="course-card">
+              <h2>{course.title}</h2>
+              <p>{course.description}</p>
+              <p>Instructor: {course.instructor.name}</p>
+              <p>
+                Start Date:{" "}
+                {new Date(course.schedule.startDate).toLocaleDateString()}
+              </p>
+              <p>
+                End Date:{" "}
+                {new Date(course.schedule.endDate).toLocaleDateString()}
+              </p>
+              <button
+                className="enroll-button"
+                onClick={() => handleEnroll(course._id)}
+              >
+                Enroll
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
       <ToastContainer />
     </div>
   );
