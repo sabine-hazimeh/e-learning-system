@@ -1,13 +1,31 @@
 import React from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { FaSignInAlt, FaUserPlus, FaSignOutAlt } from "react-icons/fa";
 import "./style.css";
-import { Link } from "react-router-dom";
-import { FaSignInAlt, FaUserPlus } from "react-icons/fa";
 
 function Header() {
+  const navigate = useNavigate();
+  const token = localStorage.getItem("authToken");
+
+  const handleLogout = async () => {
+    try {
+      await fetch("http://localhost:3000/api/logout", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      localStorage.removeItem("authToken");
+      navigate("/login");
+    } catch (error) {
+      console.error("Error logging out:", error);
+    }
+  };
+
   return (
     <div className="header">
       <div>
-        <Link to="/" className="logo ">
+        <Link to="/" className="logo">
           Learnly
         </Link>
       </div>
@@ -23,12 +41,22 @@ function Header() {
         </Link>
       </div>
       <div className="auth-links">
-        <Link to="/login" className="header-link">
-          <FaSignInAlt className="header-icons" />
-        </Link>
-        <Link to="/signup" className="header-link">
-          <FaUserPlus className="header-icons" />
-        </Link>
+        {token ? (
+          <>
+            <div onClick={handleLogout} className="header-link">
+              <FaSignOutAlt className="header-icons" />
+            </div>
+          </>
+        ) : (
+          <>
+            <Link to="/login" className="header-link">
+              <FaSignInAlt className="header-icons" />
+            </Link>
+            <Link to="/signup" className="header-link">
+              <FaUserPlus className="header-icons" />
+            </Link>
+          </>
+        )}
       </div>
     </div>
   );

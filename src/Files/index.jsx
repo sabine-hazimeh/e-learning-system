@@ -30,11 +30,16 @@ function Files() {
 
   return (
     <div className="files-container">
-      <h1>Files for Class</h1>
+      <h1>Files</h1>
       <ul>
         {files.map((file) => (
           <li key={file._id}>
-            <a href={file.fileUrl} target="_blank" rel="noopener noreferrer">
+            <a
+              href={file.fileUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              download
+            >
               {file.filename}
             </a>
           </li>
