@@ -1,34 +1,63 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  fetchClasses,
-  enrollClass,
-} from "../data-source/redux/ClassesSlice/slice";
+import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
+import {
+  setClasses,
+  setError,
+  setLoading,
+  clearError,
+} from "../data-source/redux/ClassesSlice/slice";
 import "./style.css";
 
 function Classes() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { classes, error, isLoading } = useSelector((state) => state.classes);
+  const token = useSelector((state) => state.user?.token);
 
   useEffect(() => {
-    dispatch(fetchClasses());
+    const fetchClasses = async () => {
+      dispatch(setLoading());
+      try {
+        const response = await axios.get("http://localhost:3000/api/classes");
+        dispatch(setClasses(response.data));
+      } catch (error) {
+        dispatch(setError(error.response?.data || "Failed to fetch classes"));
+      }
+    };
+
+    fetchClasses();
   }, [dispatch]);
 
-  const handleEnroll = (classId) => {
-    dispatch(enrollClass(classId))
-      .unwrap()
-      .then(() => {
-        navigate("/enrolled");
-      })
-      .catch((err) => {
-        toast.error(err.message || "Enrollment failed.");
-      });
-  };
+  const handleEnroll = async (classId) => {
+    if (!token) {
+      toast.error("No authentication token found.");
+      return;
+    }
 
+    console.log("Class ID:", classId);
+    console.log("Token:", token);
+
+    try {
+      const response = await axios.post(
+        "http://localhost:3000/api/enrollment",
+        { classId },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log("Response:", response);
+      navigate("/enrolled");
+    } catch (err) {
+      console.error("Enrollment Error:", err.response);
+      toast.error(err.response?.data?.message || "Enrollment failed.");
+    }
+  };
   return (
     <div className="classes-container">
       <h1>Classes</h1>

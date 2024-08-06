@@ -21,12 +21,7 @@ function Login() {
         username,
         password,
       });
-
-      console.log("API Response:", response.data); // Log the response to check its structure
-
       const { token, user } = response.data;
-
-      console.log("User:", user); // Log the user object to see its value
       localStorage.setItem("authToken", token);
 
       dispatch(loginSuccess({ token, user }));

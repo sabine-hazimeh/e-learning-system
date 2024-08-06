@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import axios from "axios";
 
 const enrollmentsSlice = createSlice({
   name: "enrollments",
@@ -37,32 +36,3 @@ export const {
 } = enrollmentsSlice.actions;
 
 export default enrollmentsSlice.reducer;
-
-export const fetchEnrollments = () => async (dispatch) => {
-  dispatch(fetchEnrollmentsStart());
-  try {
-    const token = localStorage.getItem("authToken");
-    const response = await axios.get("http://localhost:3000/api/enrollment", {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    dispatch(fetchEnrollmentsSuccess(response.data));
-  } catch (error) {
-    dispatch(fetchEnrollmentsFailure(error.message));
-  }
-};
-
-export const withdrawFromClass = (classId) => async (dispatch) => {
-  try {
-    const token = localStorage.getItem("authToken");
-    await axios.post(
-      "http://localhost:3000/api/withdrawals",
-      { classId },
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      }
-    );
-    dispatch(withdrawClassSuccess(classId));
-  } catch (error) {
-    console.error("Error withdrawing from class:", error);
-  }
-};
